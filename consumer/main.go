@@ -90,7 +90,7 @@ func main() {
 				log.Info().Msg("Done Generating CSV")
 			} else if message.DataId == 3 && message.Type == "xlsx" {
 				log.Info().Msg("Generating CSV")
-				err = CSV3()
+				err = XLSX3()
 				if err != nil {
 					log.Printf("%+v: %s\n", err, "Failed generating csv")
 					d.Ack(false) // Acknowledge the message even if failed
