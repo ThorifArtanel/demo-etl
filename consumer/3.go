@@ -123,8 +123,6 @@ func PDF3() (err error) {
 			c_mktsegment = 'BUILDING'
 			AND c_custkey = o_custkey
 			AND l_orderkey = o_orderkey
-			AND o_orderdate < CAST('1995-03-15' AS date)
-			AND l_shipdate > CAST('1995-03-15' AS date)
 	GROUP BY
 			l_orderkey,
 			o_orderdate,
