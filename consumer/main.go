@@ -79,7 +79,7 @@ func main() {
 				continue
 			}
 
-			if message.DataId == 3 && message.Type == "csv" {
+			if message.Type == "csv" {
 				log.Info().Msg("Generating CSV")
 				err = CSV3()
 				if err != nil {
@@ -88,16 +88,16 @@ func main() {
 					continue
 				}
 				log.Info().Msg("Done Generating CSV")
-			} else if message.DataId == 3 && message.Type == "xlsx" {
-				log.Info().Msg("Generating CSV")
+			} else if message.Type == "xlsx" {
+				log.Info().Msg("Generating XLSX")
 				err = XLSX3()
 				if err != nil {
-					log.Printf("%+v: %s\n", err, "Failed generating csv")
+					log.Printf("%+v: %s\n", err, "Failed generating xlsx")
 					d.Ack(false) // Acknowledge the message even if failed
 					continue
 				}
-				log.Info().Msg("Done Generating CSV")
-			} else if message.DataId == 4 && message.Type == "txt" {
+				log.Info().Msg("Done Generating XLSX")
+			} else if message.Type == "txt" {
 				log.Info().Msg("Generating TXT")
 				err = TXT4()
 				if err != nil {
@@ -106,6 +106,15 @@ func main() {
 					continue
 				}
 				log.Info().Msg("Done Generating TXT")
+			} else if message.Type == "pdf" {
+				log.Info().Msg("Generating PDF")
+				err = PDF3()
+				if err != nil {
+					log.Printf("%+v: %s\n", err, "Failed generating pdf")
+					d.Ack(false) // Acknowledge the message even if failed
+					continue
+				}
+				log.Info().Msg("Done Generating PDF")
 			} else {
 				log.Printf("%s: %+v\n", "Invalid message", message)
 				d.Ack(false) // Acknowledge the message even if failed

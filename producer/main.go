@@ -52,6 +52,10 @@ func main() {
 			DataId: 4,
 			Type:   "txt",
 		},
+		{
+			DataId: 3,
+			Type:   "pdf",
+		},
 	}
 	for _, v := range content {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

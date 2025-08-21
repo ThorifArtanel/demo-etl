@@ -16,7 +16,7 @@ func NewConn() (conn *sql.DB, err error) {
 		return
 	}
 
-	_, err = conn.Exec("SET s3_use_ssl = false;")
+	_, err = conn.Exec("SET s3_use_ssl = false; INSTALL excel; LOAD excel;")
 	if err != nil {
 		return
 	}
