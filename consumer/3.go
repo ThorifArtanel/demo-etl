@@ -60,25 +60,24 @@ func XLSX3() (err error) {
 	defer db.CloseConn(conn)
 
 	_, err = conn.Exec(`COPY (
-	SELECT
-    l_orderkey as order_id,
-    sum(l_extendedprice * (1 - l_discount)) AS revenue,
-    o_orderdate as order_date
-	FROM
-			's3://demo-etl/customer.parquet',
-			's3://demo-etl/orders.parquet',
-			's3://demo-etl/lineitem.parquet'
-	WHERE
-			c_mktsegment = 'BUILDING'
-			AND c_custkey = o_custkey
-			AND l_orderkey = o_orderkey
-	GROUP BY
-			l_orderkey,
-			o_orderdate,
-			o_shippriority
-	ORDER BY
-			revenue DESC,
-			o_orderdate
+		SELECT 
+			l_orderkey as order_id, 
+			sum(l_extendedprice * (1 - l_discount)) AS revenue, 
+			o_orderdate as order_date
+		FROM 
+			's3://demo-etl/customer.parquet', 
+			's3://demo-etl/orders.parquet', 
+			's3://demo-etl/lineitem.parquet' 
+		WHERE 
+			c_mktsegment = 'BUILDING' 
+			AND c_custkey = o_custkey 
+			AND l_orderkey = o_orderkey 
+			AND o_orderdate < CAST('1993-06-01' AS date) 
+		GROUP BY 
+			l_orderkey, 
+			o_orderdate, 
+			o_shippriority 
+		ORDER BY revenue DESC, o_orderdate
 	) TO 's3://demo-etl-generated/xlsx/3.xlsx' WITH (FORMAT xlsx, HEADER true, SHEET 'Generated');`)
 	if err != nil {
 		return
@@ -107,25 +106,24 @@ func PDF3() (err error) {
 	pdf.SetFont("font1", "", 11)
 
 	rows, err := conn.Query(`
-	SELECT
-    l_orderkey as order_id,
-    o_orderdate as order_date,
-    sum(l_extendedprice * (1 - l_discount)) AS revenue
+	SELECT 
+		l_orderkey as order_id, 
+		o_orderdate as order_date,
+		sum(l_extendedprice * (1 - l_discount)) AS revenue
 	FROM
-			's3://demo-etl/customer.parquet',
-			's3://demo-etl/orders.parquet',
-			's3://demo-etl/lineitem.parquet'
-	WHERE
-			c_mktsegment = 'BUILDING'
-			AND c_custkey = o_custkey
-			AND l_orderkey = o_orderkey
-	GROUP BY
-			l_orderkey,
-			o_orderdate,
-			o_shippriority
-	ORDER BY
-			revenue DESC,
-			o_orderdate;`)
+		's3://demo-etl/customer.parquet', 
+		's3://demo-etl/orders.parquet', 
+		's3://demo-etl/lineitem.parquet' 
+	WHERE 
+		c_mktsegment = 'BUILDING' 
+		AND c_custkey = o_custkey 
+		AND l_orderkey = o_orderkey 
+		AND o_orderdate < CAST('1994-07-01' AS date) 
+	GROUP BY 
+		l_orderkey, 
+		o_orderdate, 
+		o_shippriority 
+	ORDER BY revenue DESC, o_orderdate;`)
 	if err != nil {
 		return
 	}
